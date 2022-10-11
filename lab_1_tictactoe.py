@@ -12,20 +12,8 @@ def print_tic_tac_toe(values):
     print("\t{}|{}|{}".format(values[6], values[7], values[8]))
     print("\n")
 
-# print_tic_tac_toe(['x','x','x','x','x','x','x','x','x'])
 
 def check_for_winner(values,check):
-    # winner = 'none'
-    # if values[0:3]== ['X','X','X'] or values[3:6]== ['X','X','X'] or values[6:9]== ['X','X','X'] or values[0:7:3]== ['X','X','X'] or values[1:8:3]== ['X','X','X'] or values[2:9:3]== ['X','X','X'] or values[0:9:4]== ['X','X','X'] or values[2:7:2]== ['X','X','X']:
-    #     is_there_winner = True
-    #     winner = 'Player X'
-    # elif values[0:3]== ['O','O','O'] or values[3:6]== ['O','O','O'] or values[6:9]== ['O','O','O'] or values[0:7:3]== ['O','O','O'] or values[1:8:3]== ['O','O','O'] or values[2:9:3]== ['O','O','O'] or values[0:9:4]== ['O','O','O'] or values[2:7:2]== ['O','O','O']:
-    #     is_there_winner = True
-    #     winner = 'Player_O'
-    # else:
-    #     is_there_winner = False
-
-    # return is_there_winner, winner
     if values[check[0]] == values[check[1]] == values[check[2]] and values[check[0]]!= ' ':
         is_there_winner = True
         winner = str(values[check[1]])
