@@ -1,4 +1,4 @@
-from poop import load_file, extract_header, extract_global_colour_table, extract_image, extract_image_descriptor, extract_screen_descriptor
+from gif import load_file, extract_header, extract_global_colour_table, extract_image, extract_image_descriptor, extract_screen_descriptor
 
 def main():
     print()
