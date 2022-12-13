@@ -99,76 +99,15 @@ class Diffusion:
 
 
     def next_step(self, n_steps): 
-        du_array = [[0.0 for i in range(self.cols)] for j in range(self.rows)]
         n_steps = int(n_steps)
         # iterate for n_steps times, for every single particle within space
+        # for n in range(n_steps+1):
         for n in range(n_steps):
             for i in range(0,self.rows):
                 for j in range(0,self.cols):
                     du =  self.du(i,j)
-                    # Change value of du_array at the index by du
-                    du_array[i][j] = du
-            # now change each self.space particle by the corresponding du amount 
-            for p in range(self.rows):
-                for q in range(self.cols):
-                    self.space[p][q] += du_array[p][q]
-        
-
-def main():
-    
-    space1 = Diffusion(11,15,[1, 1, 1, 1], 11*[1], 11*[1], 15*[0], 15*[0])
-    
-    print(space1.rows)
-    print(space1.cols)
-    print(space1.bc_settings)
-    print(space1.left_bc)
-    print(space1.right_bc)
-    print(space1.bottom_bc)
-    print(space1.top_bc)
-    print(space1.space)
-    print(type(space1.space))
-    print(type(space1.space[0][1]))
-    print()
-    
-    space1.set_cell([4,6],[5,9],1)
-    space1.print_space()
-    print()
-    space1.next_step(100)
-    space1.print_space()
-    print()
-    
-
-    print(type(space1.rows))
-    print(type(space1.cols))
-    print(type(space1.bc_settings))
-    print(type(space1.bc_settings[0]))
-    print(type(space1.left_bc))
-    print(type(space1.left_bc[0]))
-    print(type(space1.right_bc))
-    print(type(space1.right_bc[0]))
-    print(type(space1.bottom_bc))
-    print(type(space1.bottom_bc[0]))
-    print(type(space1.top_bc))
-    print(type(space1.top_bc[0]))
-
-    print()
-    space1 = Diffusion(11,15,[1, 1, 1, 1], 11*[0], 11*[0], 15*[0], 15*[0])
-    space1.set_cell([4,6],[5,9],1)
-    space1.set_cell([0,2],[0,2],1)
-    space1.next_step(10000)
-    space1.print_space()
-    print()
-    space1 = Diffusion(11,15,[2, 2, 1, 1], 11*[0], 11*[0], 15*[1], 15*[1])
-    space1.set_cell([4,6],[5,9],1)
-    space1.set_cell([0,2],[0,2],1)
-    space1.next_step(10000)
-    space1.print_space()
-    print()
-
-if __name__ == '__main__':
-    main()
-
-
+                    # Change value at the index by du
+                    self.space[i][j] += du
 
 
     

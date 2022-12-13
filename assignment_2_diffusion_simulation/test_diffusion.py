@@ -1,20 +1,20 @@
-from diffusion import Diffusion
+from diffusion_copy import Diffusion
 
 def main():
     
     space1 = Diffusion(11,15,[1, 1, 1, 1], 11*[1], 11*[1], 15*[0], 15*[0])
     
-    # print(space1.rows)
-    # print(space1.cols)
-    # print(space1.bc_settings)
-    # print(space1.left_bc)
-    # print(space1.right_bc)
-    # print(space1.bottom_bc)
-    # print(space1.top_bc)
-    # print(space1.space)
+    print(space1.rows)
+    print(space1.cols)
+    print(space1.bc_settings)
+    print(space1.left_bc)
+    print(space1.right_bc)
+    print(space1.bottom_bc)
+    print(space1.top_bc)
+    print(space1.space)
     print(type(space1.space))
     print(type(space1.space[0][1]))
-
+    print()
     
     space1.set_cell([4,6],[5,9],1)
     space1.print_space()
@@ -24,19 +24,20 @@ def main():
     print()
     
 
-    # print(type(space1.rows))
-    # print(type(space1.cols))
-    # print(type(space1.bc_settings))
-    # print(type(space1.bc_settings[0]))
-    # print(type(space1.left_bc))
-    # print(type(space1.left_bc[0]))
-    # print(type(space1.right_bc))
-    # print(type(space1.right_bc[0]))
-    # print(type(space1.bottom_bc))
-    # print(type(space1.bottom_bc[0]))
-    # print(type(space1.top_bc))
-    # print(type(space1.top_bc[0]))
+    print(type(space1.rows))
+    print(type(space1.cols))
+    print(type(space1.bc_settings))
+    print(type(space1.bc_settings[0]))
+    print(type(space1.left_bc))
+    print(type(space1.left_bc[0]))
+    print(type(space1.right_bc))
+    print(type(space1.right_bc[0]))
+    print(type(space1.bottom_bc))
+    print(type(space1.bottom_bc[0]))
+    print(type(space1.top_bc))
+    print(type(space1.top_bc[0]))
 
+    print()
     space1 = Diffusion(11,15,[1, 1, 1, 1], 11*[0], 11*[0], 15*[0], 15*[0])
     space1.set_cell([4,6],[5,9],1)
     space1.set_cell([0,2],[0,2],1)
@@ -50,12 +51,33 @@ def main():
     space1.print_space()
     print()
 
-    space1 = Diffusion(10,10,[2, 2, 2, 2], 10*[1], 10*[1], 10*[1], 10*[1])
-    space1.set_cell([4,5],[4,5],1)
-    space1.next_step(10060)
-    space1.print_space()
-    print()
+# if __name__ == '__main__':
+#     main()
 
-if __name__ == '__main__':
-    main()
+answer = """0.93 0.90 0.80 0.65 0.54 0.50 0.49 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 
+0.82 0.77 0.63 0.42 0.27 0.22 0.21 0.20 0.20 0.19 0.18 0.17 0.17 0.17 0.17 
+0.61 0.57 0.45 0.27 0.17 0.15 0.16 0.17 0.16 0.13 0.09 0.06 0.05 0.05 0.05 
+0.32 0.30 0.24 0.17 0.17 0.24 0.30 0.32 0.30 0.23 0.13 0.05 0.02 0.01 0.01 
+0.12 0.12 0.11 0.13 0.23 0.41 0.53 0.57 0.53 0.40 0.22 0.08 0.02 0.01 0.00 
+0.04 0.04 0.05 0.11 0.26 0.48 0.64 0.68 0.64 0.48 0.26 0.10 0.03 0.01 0.00 
+0.01 0.01 0.03 0.09 0.22 0.40 0.53 0.57 0.53 0.40 0.22 0.08 0.02 0.01 0.00 
+0.01 0.01 0.02 0.05 0.13 0.23 0.30 0.32 0.30 0.23 0.13 0.05 0.02 0.01 0.01 
+0.05 0.05 0.05 0.06 0.09 0.13 0.16 0.16 0.16 0.13 0.09 0.06 0.05 0.05 0.05 
+0.17 0.17 0.17 0.17 0.18 0.19 0.20 0.20 0.20 0.19 0.18 0.17 0.17 0.17 0.17 
+0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48"""
 
+mine = """0.93 0.90 0.80 0.65 0.54 0.50 0.49 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48
+0.82 0.77 0.63 0.42 0.27 0.22 0.21 0.20 0.20 0.19 0.18 0.17 0.17 0.17 0.17
+0.61 0.57 0.45 0.27 0.17 0.15 0.16 0.17 0.16 0.13 0.09 0.06 0.05 0.05 0.05
+0.32 0.30 0.24 0.17 0.17 0.24 0.30 0.32 0.30 0.23 0.13 0.05 0.02 0.01 0.01
+0.12 0.12 0.11 0.13 0.23 0.41 0.53 0.57 0.53 0.40 0.22 0.08 0.02 0.01 0.00
+0.04 0.04 0.05 0.11 0.26 0.48 0.64 0.68 0.64 0.48 0.26 0.10 0.03 0.01 0.00
+0.01 0.01 0.03 0.09 0.22 0.40 0.53 0.57 0.53 0.40 0.22 0.08 0.02 0.01 0.00
+0.01 0.01 0.02 0.05 0.13 0.23 0.30 0.32 0.30 0.23 0.13 0.05 0.02 0.01 0.01
+0.05 0.05 0.05 0.06 0.09 0.13 0.16 0.16 0.16 0.13 0.09 0.06 0.05 0.05 0.05
+0.17 0.17 0.17 0.17 0.18 0.19 0.20 0.20 0.20 0.19 0.18 0.17 0.17 0.17 0.17
+0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48 0.48"""
+
+
+if answer == mine:
+    print('true')
