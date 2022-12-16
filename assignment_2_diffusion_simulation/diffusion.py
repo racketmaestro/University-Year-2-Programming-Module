@@ -1,36 +1,43 @@
 class Diffusion:
+    """
+    The Diffusion class represents a 2D space diffusion simulation. An initial state value can be assigned to a subset of the 2D space.
+    The class can be used to compute the change of state for the space after a given number of time steps.
 
-    def __init__(self, rows = 10, cols = 10, bc_settings = [1,1,1,1], left_bc = None, right_bc = None, top_bc = None, bottom_bc = None):
-        self.rows  = int(rows)
-        self.cols = int(cols)
-        self.bc_settings = list(map(int,bc_settings))
+    Methods:
+        - __init__: Initializes the Diffusion class with default or user-specified values for number of rows and columns,
+        boundary conditions settings for each border, and boundary conditions initial values for each index at the 4 borders.
+        - set_cell: Sets the state value for a range of cells in the 2D space.
+        - print_space: Prints the current state of the 2D space.
+        - du_x: Computes the derivative of the state with respect to time, due to adjacent horizontal cells, at a given index.
+        - du_y: Computes the derivative of the state with respect to time, due to adjacent vertical cells, at a given index.
+        - du: Computes the net derivative of the state with respect to time.
+        
+    Attributes:
+        - rows (int): The number of rows in the 2D space.
+        - cols (int): The number of columns in the 2D space.
+        - bc_settings (list): A list of boundary condition settings for each of the 4 borders.
+        - left_bc (list): A list of boundary condition values for the left border.
+        - right_bc (list): A list of boundary condition values for the right border.
+        - top_bc (list): A list of boundary condition values for the top border.
+        - bottom_bc (list): A list of boundary condition values for the bottom border.
+        - space (list): A 2D array representing the state of each particle.
+    """
 
-        # set default values if none is passed into arguments
-        if left_bc is None:
-            self.left_bc = list(map(float,rows*[0]))
-        else:
-            self.left_bc = list(map(float,left_bc))
-
-        if right_bc is None:
-            self.right_bc = list(map(float,rows*[0]))
-        else:
-            self.right_bc = list(map(float,right_bc))
-
-        if top_bc is None:
-            self.top_bc = list(map(float,cols*[0]))
-        else:
-            self.top_bc = list(map(float,top_bc))
-
-        if bottom_bc is None:
-            self.bottom_bc = list(map(float,cols*[0]))
-        else:
-            self.bottom_bc = list(map(float,bottom_bc))
+    def __init__(self, rows= None, cols= None, bc_settings= None, left_bc= None, right_bc= None, top_bc= None, bottom_bc= None):
+        # set default values if None is passed into positional arguments
+        self.rows  = int(rows) if rows else 10
+        self.cols = int(cols) if cols else 10
+        self.bc_settings = list(map(int,bc_settings)) if bc_settings else [1,1,1,1]   
+        self.left_bc = [float(i) for i in left_bc] if left_bc else [0.0] * self.rows
+        self.right_bc = [float(i) for i in right_bc] if right_bc else [0.0] * self.rows
+        self.top_bc = [float(i) for i in top_bc] if top_bc else [0.0] * self.cols
+        self.bottom_bc = [float(i) for i in bottom_bc] if bottom_bc else [0.0] * self.cols
 
         # initialise 2D array of space with default values of 0.0
         self.space = [[0.0 for i in range(self.cols)] for j in range(self.rows)]
         
     def set_cell(self, row_range, column_range, state):
-        # iterate over the row and column indexes and set to state
+        '''iterate over the row and column indexes and set to state'''
         for row in range(row_range[0],row_range[1]+1):
             for col in range(column_range[0],column_range[1]+1):
                 
@@ -39,66 +46,79 @@ class Diffusion:
     def print_space(self):
         for i in range(self.rows):
             for j in range(self.cols):
-                print(f'{self.space[i][j]:10.6f}',end='')
+                print(f'{self.space[i][j]:1.4f}',end=' ')
             print()
             
     
-    def du_x(self, row_idx, col_idx):   
-
-        # if index is not at left or right border
-        if col_idx < self.cols-1 and col_idx > 0: 
+    def du_x(self, row_idx, col_idx):
+        '''return delta x at the given input index'''
+        
+        if col_idx < self.cols-1 and col_idx > 0:
+        # index is not at left or right border    
             du_x = self.space[row_idx][col_idx + 1] - 2*self.space[row_idx][col_idx] + self.space[row_idx][col_idx-1]
-        # if index given is at the right border
-        elif col_idx == self.cols-1: 
-            # check boundary condition at right border
+            
+        elif col_idx == self.cols-1:
+        # index given is at the right border
             bc_setting_right = self.bc_settings[1]
             if bc_setting_right == 1:
+            # Direchlet condition
                 du_x = self.right_bc[row_idx] - 2*self.space[row_idx][col_idx] + self.space[row_idx][col_idx - 1]
             else:
+            # Neumann condition
                 du_x = 2*self.space[row_idx][col_idx-1] - 2*self.space[row_idx][col_idx] + 2*self.right_bc[row_idx]
-        #if index given is at the left border
-        elif col_idx == 0: 
-            # check boundary condition at left border
+                
+        elif col_idx == 0:
+        # index given is at the left border
             bc_setting_left = self.bc_settings[0]
-            if bc_setting_left == 1: 
+            if bc_setting_left == 1:
+            # Direchlet condition
                 du_x = self.space[row_idx][col_idx + 1] - 2*self.space[row_idx][col_idx] + self.left_bc[row_idx]
             else:
+            # Neumann condition
                 du_x = 2*self.space[row_idx][col_idx + 1] - 2*self.space[row_idx][col_idx] - 2*self.left_bc[row_idx]
                 
         return du_x
         
     def du_y(self, row_idx, col_idx):
-        # if is not at top or bottom border
-        if row_idx < self.rows-1 and row_idx > 0: 
+        '''return delta y at the given input index'''
+        
+        if row_idx < self.rows-1 and row_idx > 0:
+        # index is not at top or bottom border
             du_y = self.space[row_idx +1][col_idx] - 2*self.space[row_idx][col_idx] + self.space[row_idx-1][col_idx]
-        # if index given is at bottom border
-        elif row_idx == self.rows-1: 
-            # check boundary condition at bottom border
+        
+        elif row_idx == self.rows-1:
+        # index given is at bottom border
             bc_setting_bottom = self.bc_settings[3]
             if bc_setting_bottom == 1:
+            # Direchlet condition
                 du_y = self.bottom_bc[col_idx] - 2*self.space[row_idx][col_idx] + self.space[row_idx-1][col_idx]
             else:
+            # Neumann condition
                 du_y = 2*self.space[row_idx-1][col_idx] - 2*self.space[row_idx][col_idx] + 2*self.bottom_bc[col_idx]
-        # if index given is at top border
-        elif row_idx == 0: 
-            # check boundary condition at top border
+        
+        elif row_idx == 0:
+        # index given is at top border
             bc_setting_top = self.bc_settings[2]
             if bc_setting_top == 1:
+            # Direchlet condition
                 du_y = self.space[row_idx+1][col_idx] - 2*self.space[row_idx][col_idx] + self.top_bc[col_idx]
             else:
+            # Neumann condition
                 du_y = 2*self.space[row_idx+1][col_idx] - 2*self.space[row_idx][col_idx] - 2*self.top_bc[col_idx]
         
         return du_y
 
-    # calculate the final delta u at the index given
+    
     def du(self,row_idx,col_idx):
+        '''returns final delta u at the index passed'''
         delta_x = self.du_x(row_idx,col_idx)
         delta_y = self.du_y(row_idx,col_idx)
         du = 0.0001*(delta_x + delta_y)
         return du
 
 
-    def next_step(self, n_steps): 
+    def next_step(self, n_steps):
+        '''modify the state of space given a number of time steps'''
         du_array = [[0.0 for i in range(self.cols)] for j in range(self.rows)]
         n_steps = int(n_steps)
         # iterate for n_steps times, for every single particle within space
@@ -112,65 +132,3 @@ class Diffusion:
             for p in range(self.rows):
                 for q in range(self.cols):
                     self.space[p][q] += du_array[p][q]
-        
-
-def main():
-    
-    space1 = Diffusion(11,15,[1, 1, 1, 1], 11*[1], 11*[1], 15*[0], 15*[0])
-    
-    print(space1.rows)
-    print(space1.cols)
-    print(space1.bc_settings)
-    print(space1.left_bc)
-    print(space1.right_bc)
-    print(space1.bottom_bc)
-    print(space1.top_bc)
-    print(space1.space)
-    print(type(space1.space))
-    print(type(space1.space[0][1]))
-    print()
-    
-    space1.set_cell([4,6],[5,9],1)
-    space1.print_space()
-    print()
-    space1.next_step(100)
-    space1.print_space()
-    print()
-    
-
-    print(type(space1.rows))
-    print(type(space1.cols))
-    print(type(space1.bc_settings))
-    print(type(space1.bc_settings[0]))
-    print(type(space1.left_bc))
-    print(type(space1.left_bc[0]))
-    print(type(space1.right_bc))
-    print(type(space1.right_bc[0]))
-    print(type(space1.bottom_bc))
-    print(type(space1.bottom_bc[0]))
-    print(type(space1.top_bc))
-    print(type(space1.top_bc[0]))
-
-    print()
-    space1 = Diffusion(11,15,[1, 1, 1, 1], 11*[0], 11*[0], 15*[0], 15*[0])
-    space1.set_cell([4,6],[5,9],1)
-    space1.set_cell([0,2],[0,2],1)
-    space1.next_step(10000)
-    space1.print_space()
-    print()
-    space1 = Diffusion(11,15,[2, 2, 1, 1], 11*[0], 11*[0], 15*[1], 15*[1])
-    space1.set_cell([4,6],[5,9],1)
-    space1.set_cell([0,2],[0,2],1)
-    space1.next_step(10000)
-    space1.print_space()
-    print()
-
-if __name__ == '__main__':
-    main()
-
-
-
-
-    
-
-
